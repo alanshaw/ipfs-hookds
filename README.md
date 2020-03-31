@@ -6,7 +6,7 @@
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/alanshaw/ipfs-hookds)
 [![golang version](https://img.shields.io/badge/golang-%3E%3D1.14.0-orange.svg?style=flat-square)](https://golang.org/)
 
-> A wrapper for an [IPFS datastore](https://github.com/ipfs/go-datastore) and adds optional before and after hooks into it's methods.
+> A wrapper for an [IPFS datastore](https://github.com/ipfs/go-datastore) that adds optional before and after hooks to it's methods.
 
 ## Install
 
@@ -34,7 +34,7 @@ import (
 func main() {
     ds := datastore.NewMapDatastore()
     hds := hook.NewDatastore(ds, opts.OnAfterPut(func(k datastore.Key, v []byte, err error) error {
-        fmt.Println("key: %v value: %v was put to the datastore")
+        fmt.Printf("key: %v value: %s was put to the datastore\n", k, v)
 		return err
     }))
     defer hds.Close()
@@ -43,6 +43,9 @@ func main() {
     value := []byte("test")
 
     hds.Put(key, value)
+
+    // Output:
+    // key: /test value: test was put to the datastore
 }
 ```
 
