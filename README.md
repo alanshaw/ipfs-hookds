@@ -24,10 +24,10 @@ Hook for after a `Put`:
 package main
 
 import (
-    "fmt"
+	"fmt"
 
 	"github.com/ipfs/go-datastore"
-    "github.com/alanshaw/ipfs-hookds/opts"
+	"github.com/alanshaw/ipfs-hookds/opts"
 	"github.com/alanshaw/ipfs-hookds"
 )
 
