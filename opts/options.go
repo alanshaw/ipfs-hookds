@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore/query"
 )
 
 // Options are hook datastore options.
@@ -18,6 +19,8 @@ type Options struct {
 	OnAfterBatch   func(datastore.Batch, error) (datastore.Batch, error)
 	OnBeforeHas    func(datastore.Key) datastore.Key
 	OnAfterHas     func(datastore.Key, bool, error) (bool, error)
+	OnBeforeQuery  func(query.Query) query.Query
+	OnAfterQuery   func(query.Query, query.Results, error) (query.Results, error)
 }
 
 // Option is the hook datastore option type.
@@ -119,6 +122,24 @@ func OnBeforeHas(f func(datastore.Key) datastore.Key) Option {
 func OnAfterHas(f func(datastore.Key, bool, error) (bool, error)) Option {
 	return func(o *Options) error {
 		o.OnAfterHas = f
+		return nil
+	}
+}
+
+// OnBeforeQuery configures a hook that is called _before_ Query.
+// Defaults to noop.
+func OnBeforeQuery(f func(query.Query) query.Query) Option {
+	return func(o *Options) error {
+		o.OnBeforeQuery = f
+		return nil
+	}
+}
+
+// OnAfterQuery configures a hook that is called _after_ Query.
+// Defaults to noop.
+func OnAfterQuery(f func(query.Query, query.Results, error) (query.Results, error)) Option {
+	return func(o *Options) error {
+		o.OnAfterQuery = f
 		return nil
 	}
 }

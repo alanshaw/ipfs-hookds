@@ -16,7 +16,7 @@ type Options struct {
 	OnAfterCommit  func(error) error
 }
 
-// Option is the hook datastore option type.
+// Option is the batch option type.
 type Option func(*Options) error
 
 // Apply applies the given options to this Option.
@@ -65,7 +65,7 @@ func OnAfterDelete(f func(datastore.Key, error) error) Option {
 	}
 }
 
-// OnAfterCommit configures a hook that is called _before_ Commit.
+// OnBeforeCommit configures a hook that is called _before_ Commit.
 // Defaults to noop.
 func OnBeforeCommit(f func()) Option {
 	return func(o *Options) error {

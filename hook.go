@@ -72,9 +72,16 @@ func (hds *Datastore) GetSize(key datastore.Key) (int, error) {
 	return hds.ds.GetSize(key)
 }
 
-// Query searches the datastore and returns a query result.
+// Query searches the datastore and returns a query result, it calls OnBeforeQuery and OnAfterQuery hooks.
 func (hds *Datastore) Query(q query.Query) (query.Results, error) {
-	return hds.ds.Query(q)
+	if hds.options.OnBeforeQuery != nil {
+		q = hds.options.OnBeforeQuery(q)
+	}
+	res, err := hds.ds.Query(q)
+	if hds.options.OnAfterQuery != nil {
+		res, err = hds.options.OnAfterQuery(q, res, err)
+	}
+	return res, err
 }
 
 // Sync guarantees that any Put or Delete calls under prefix that returned
