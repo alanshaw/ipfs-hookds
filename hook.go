@@ -74,7 +74,7 @@ func (hds *Datastore) GetSize(key datastore.Key) (int, error) {
 
 // Query searches the datastore and returns a query result.
 func (hds *Datastore) Query(q query.Query) (query.Results, error) {
-	return hds.Query(q)
+	return hds.ds.Query(q)
 }
 
 // Sync guarantees that any Put or Delete calls under prefix that returned
