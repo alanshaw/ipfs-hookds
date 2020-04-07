@@ -22,7 +22,14 @@ func (hres *Results) Query() query.Query {
 }
 
 func (hres *Results) Next() <-chan query.Result {
-	return hres.res.Next()
+	if hres.options.OnBeforeNext != nil {
+		hres.options.OnBeforeNext()
+	}
+	c := hres.res.Next()
+	if hres.options.OnAfterNext != nil {
+		c = hres.options.OnAfterNext(c)
+	}
+	return c
 }
 
 func (hres *Results) NextSync() (query.Result, bool) {
@@ -37,11 +44,25 @@ func (hres *Results) NextSync() (query.Result, bool) {
 }
 
 func (hres *Results) Rest() ([]query.Entry, error) {
-	return hres.res.Rest()
+	if hres.options.OnBeforeRest != nil {
+		hres.options.OnBeforeRest()
+	}
+	es, err := hres.res.Rest()
+	if hres.options.OnAfterRest != nil {
+		es, err = hres.options.OnAfterRest(es, err)
+	}
+	return es, err
 }
 
 func (hres *Results) Close() error {
-	return hres.res.Close()
+	if hres.options.OnBeforeClose != nil {
+		hres.options.OnBeforeClose()
+	}
+	err := hres.res.Close()
+	if hres.options.OnAfterClose != nil {
+		err = hres.options.OnAfterClose(err)
+	}
+	return err
 }
 
 func (hres *Results) Process() goprocess.Process {

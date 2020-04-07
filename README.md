@@ -49,6 +49,82 @@ func main() {
 }
 ```
 
+Hook into a batch `Put`:
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/ipfs/go-datastore"
+    bopts "github.com/alanshaw/ipfs-hookds/batch/opts"
+    "github.com/alanshaw/ipfs-hookds/batch"
+    "github.com/alanshaw/ipfs-hookds/opts"
+    "github.com/alanshaw/ipfs-hookds"
+)
+
+func main() {
+    ds := datastore.NewMapDatastore()
+    hds := hook.NewDatastore(ds, opts.OnAfterBatch(func(b datastore.Batch, err error) (datastore.Batch, error) {
+        return batch.NewBatch(b, bopts.OnAfterPut(func(datastore.Key, []byte, error) error {
+            fmt.Printf("key: %v value: %s was put to a batch\n", k, v)
+		    return err
+        })), err
+    }))
+    defer hds.Close()
+
+    key := datastore.NewKey("test")
+    value := []byte("test")
+
+    bch := hds.Batch()
+
+    bch.Put(key, value)
+    bch.Commit()
+
+    // Output:
+    // key: /test value: test was put to a batch
+}
+```
+
+Hook into a query `NextSync`:
+
+```go
+package main
+
+import (
+	"fmt"
+
+    "github.com/ipfs/go-datastore"
+    "github.com/ipfs/go-datastore/query"
+    ropts "github.com/alanshaw/ipfs-hookds/query/results/opts"
+    "github.com/alanshaw/ipfs-hookds/query/results"
+    "github.com/alanshaw/ipfs-hookds/opts"
+    "github.com/alanshaw/ipfs-hookds"
+)
+
+func main() {
+    ds := datastore.NewMapDatastore()
+    hds := hook.NewDatastore(ds, opts.OnAfterQuery(func(q query.Query, res query.Results, err error) (query.Results, error) {
+        return results.NewResults(res, ropts.OnAfterNextSync(func(r query.Result, ok bool) (query.Result, bool) {
+            fmt.Printf("result: %v ok: %s was next\n", r, ok)
+		    return r, ok
+        })), err
+    }))
+    defer hds.Close()
+
+    key := datastore.NewKey("test")
+    value := []byte("test")
+    hds.Put(key, value)
+
+    res := hds.Query(query.Query{
+        Prefix: "/test"
+    })
+
+    res.NextSync()
+}
+```
+
 ## API
 
 [GoDoc Reference](https://godoc.org/github.com/alanshaw/ipfs-hookds)
