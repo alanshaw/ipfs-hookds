@@ -1,10 +1,10 @@
 # ipfs-hookds
 
-[![Build Status](https://img.shields.io/travis/com/libp2p/hydra-booster/master?style=flat-square)](https://travis-ci.org/alanshaw/ipfs-hookds)
-[![Coverage](https://img.shields.io/codecov/c/github/alanshaw/ipfs-hookds?style=flat-square)](https://codecov.io/gh/alanshaw/ipfs-hookds)
-[![Standard README](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/alanshaw/ipfs-hookds)
-[![golang version](https://img.shields.io/badge/golang-%3E%3D1.14.0-orange.svg?style=flat-square)](https://golang.org/)
+[![Build Status](https://travis-ci.org/alanshaw/ipfs-hookds.svg?branch=master)](https://travis-ci.org/alanshaw/ipfs-hookds)
+[![Coverage](https://codecov.io/gh/alanshaw/ipfs-hookds/branch/master/graph/badge.svg)](https://codecov.io/gh/alanshaw/ipfs-hookds)
+[![Standard README](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg)](https://godoc.org/github.com/alanshaw/ipfs-hookds)
+[![golang version](https://img.shields.io/badge/golang-%3E%3D1.14.0-orange.svg)](https://golang.org/)
 
 > A wrapper for an [IPFS datastore](https://github.com/ipfs/go-datastore) that adds optional before and after hooks to it's methods.
 
