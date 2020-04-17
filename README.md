@@ -5,6 +5,7 @@
 [![Standard README](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg)](https://godoc.org/github.com/alanshaw/ipfs-hookds)
 [![golang version](https://img.shields.io/badge/golang-%3E%3D1.14.0-orange.svg)](https://golang.org/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alanshaw/ipfs-hookds)](https://goreportcard.com/report/github.com/alanshaw/ipfs-hookds)
 
 > A wrapper for an [IPFS datastore](https://github.com/ipfs/go-datastore) that adds optional before and after hooks to it's methods.
 
