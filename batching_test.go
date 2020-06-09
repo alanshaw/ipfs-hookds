@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/alanshaw/ipfs-hookds/opts"
 	"github.com/ipfs/go-datastore"
 )
 
@@ -31,7 +30,7 @@ func TestBatchingHookBatch(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	bds := NewBatching(ds, opts.OnBeforeBatch(onBeforeBatch), opts.OnAfterBatch(onAfterBatch))
+	bds := NewBatching(ds, WithBeforeBatch(onBeforeBatch), WithAfterBatch(onAfterBatch))
 	defer bds.Close()
 
 	bch, err := bds.Batch()
@@ -88,7 +87,7 @@ func TestBatchingHookPut(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	bds := NewBatching(ds, opts.OnBeforePut(onBeforePut), opts.OnAfterPut(onAfterPut))
+	bds := NewBatching(ds, WithBeforePut(onBeforePut), WithAfterPut(onAfterPut))
 	defer bds.Close()
 
 	err := bds.Put(key, value)
@@ -132,7 +131,7 @@ func TestBatchingHookGet(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	bds := NewBatching(ds, opts.OnBeforeGet(onBeforeGet), opts.OnAfterGet(onAfterGet))
+	bds := NewBatching(ds, WithBeforeGet(onBeforeGet), WithAfterGet(onAfterGet))
 	defer bds.Close()
 
 	err := bds.Put(key, value)
@@ -179,7 +178,7 @@ func TestBatchingHookDelete(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	bds := NewBatching(ds, opts.OnBeforeDelete(onBeforeDelete), opts.OnAfterDelete(onAfterDelete))
+	bds := NewBatching(ds, WithBeforeDelete(onBeforeDelete), WithAfterDelete(onAfterDelete))
 	defer bds.Close()
 
 	err := bds.Put(key, value)
@@ -228,7 +227,7 @@ func TestBatchingHookHas(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	bds := NewBatching(ds, opts.OnBeforeHas(onBeforeHas), opts.OnAfterHas(onAfterHas))
+	bds := NewBatching(ds, WithBeforeHas(onBeforeHas), WithAfterHas(onAfterHas))
 	defer bds.Close()
 
 	err := bds.Put(key, value)

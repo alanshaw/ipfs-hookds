@@ -1,21 +1,18 @@
 package hook
 
 import (
-	"github.com/alanshaw/ipfs-hookds/opts"
-	hookopts "github.com/alanshaw/ipfs-hookds/opts"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 )
 
 // Batching is a datastore with hooks that also supports batching
 type Batching struct {
-	ds      datastore.Batching
-	hds     *Datastore
-	options opts.Options
+	ds  datastore.Batching
+	hds *Datastore
 }
 
 // NewBatching wraps a datastore.Batching datastore and adds optional before and after hooks into it's methods
-func NewBatching(ds datastore.Batching, options ...hookopts.Option) *Batching {
+func NewBatching(ds datastore.Batching, options ...Option) *Batching {
 	return &Batching{ds: ds, hds: NewDatastore(ds, options...)}
 }
 
@@ -51,12 +48,12 @@ func (bds *Batching) Query(q query.Query) (query.Results, error) {
 
 // Batch creates a container for a group of updates, it calls OnBeforeBatch and OnAfterBatch hooks.
 func (bds *Batching) Batch() (datastore.Batch, error) {
-	if bds.hds.options.OnBeforeBatch != nil {
-		bds.hds.options.OnBeforeBatch()
+	if bds.hds.options.BeforeBatch != nil {
+		bds.hds.options.BeforeBatch()
 	}
 	bch, err := bds.ds.Batch()
-	if bds.hds.options.OnAfterBatch != nil {
-		bch, err = bds.hds.options.OnAfterBatch(bch, err)
+	if bds.hds.options.AfterBatch != nil {
+		bch, err = bds.hds.options.AfterBatch(bch, err)
 	}
 	return bch, err
 }

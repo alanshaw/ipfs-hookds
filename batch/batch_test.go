@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/alanshaw/ipfs-hookds/batch/opts"
 	"github.com/ipfs/go-datastore"
 )
 
@@ -62,7 +61,7 @@ func TestBatchHookPut(t *testing.T) {
 		t.Fatal("unexpected error", err)
 	}
 
-	hbh := NewBatch(bch, opts.OnBeforePut(onBeforePut), opts.OnAfterPut(onAfterPut))
+	hbh := NewBatch(bch, WithBeforePut(onBeforePut), WithAfterPut(onAfterPut))
 
 	err = hbh.Put(key, value)
 	if err != nil {
@@ -119,7 +118,7 @@ func TestBatchHookDelete(t *testing.T) {
 		t.Fatal("unexpected error", err)
 	}
 
-	hbh := NewBatch(bch, opts.OnBeforeDelete(onBeforeDelete), opts.OnAfterDelete(onAfterDelete))
+	hbh := NewBatch(bch, WithBeforeDelete(onBeforeDelete), WithAfterDelete(onAfterDelete))
 
 	err = hbh.Delete(key)
 	if err != nil {
@@ -164,7 +163,7 @@ func TestBatchHookCommit(t *testing.T) {
 		t.Fatal("unexpected error", err)
 	}
 
-	hbh := NewBatch(bch, opts.OnBeforeCommit(onBeforeCommit), opts.OnAfterCommit(onAfterCommit))
+	hbh := NewBatch(bch, WithBeforeCommit(onBeforeCommit), WithAfterCommit(onAfterCommit))
 
 	err = hbh.Put(key, value)
 	if err != nil {

@@ -1,7 +1,6 @@
 package hook
 
 import (
-	hookopts "github.com/alanshaw/ipfs-hookds/opts"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 )
@@ -9,60 +8,60 @@ import (
 // Datastore is a wrapper for a datastore that adds optional before and after hooks into it's methods.
 type Datastore struct {
 	ds      datastore.Datastore
-	options hookopts.Options
+	options Options
 }
 
 // NewDatastore wraps a datastore.Datastore datastore and adds optional before and after hooks into it's methods.
-func NewDatastore(ds datastore.Datastore, options ...hookopts.Option) *Datastore {
-	opts := hookopts.Options{}
+func NewDatastore(ds datastore.Datastore, options ...Option) *Datastore {
+	opts := Options{}
 	opts.Apply(options...)
 	return &Datastore{ds: ds, options: opts}
 }
 
 // Put stores the object `value` named by `key`, it calls OnBeforePut and OnAfterPut hooks.
 func (hds *Datastore) Put(key datastore.Key, value []byte) error {
-	if hds.options.OnBeforePut != nil {
-		key, value = hds.options.OnBeforePut(key, value)
+	if hds.options.BeforePut != nil {
+		key, value = hds.options.BeforePut(key, value)
 	}
 	err := hds.ds.Put(key, value)
-	if hds.options.OnAfterPut != nil {
-		err = hds.options.OnAfterPut(key, value, err)
+	if hds.options.AfterPut != nil {
+		err = hds.options.AfterPut(key, value, err)
 	}
 	return err
 }
 
 // Delete removes the value for given `key`, it calls OnBeforeDelete and OnAfterDelete hooks.
 func (hds *Datastore) Delete(key datastore.Key) error {
-	if hds.options.OnBeforeDelete != nil {
-		key = hds.options.OnBeforeDelete(key)
+	if hds.options.BeforeDelete != nil {
+		key = hds.options.BeforeDelete(key)
 	}
 	err := hds.ds.Delete(key)
-	if hds.options.OnAfterDelete != nil {
-		err = hds.options.OnAfterDelete(key, err)
+	if hds.options.AfterDelete != nil {
+		err = hds.options.AfterDelete(key, err)
 	}
 	return err
 }
 
 // Get retrieves the object `value` named by `key`, it calls OnBeforeGet and OnAfterGet hooks.
 func (hds *Datastore) Get(key datastore.Key) ([]byte, error) {
-	if hds.options.OnBeforeGet != nil {
-		key = hds.options.OnBeforeGet(key)
+	if hds.options.BeforeGet != nil {
+		key = hds.options.BeforeGet(key)
 	}
 	value, err := hds.ds.Get(key)
-	if hds.options.OnAfterGet != nil {
-		value, err = hds.options.OnAfterGet(key, value, err)
+	if hds.options.AfterGet != nil {
+		value, err = hds.options.AfterGet(key, value, err)
 	}
 	return value, err
 }
 
 // Has returns whether the `key` is mapped to a `value`.
 func (hds *Datastore) Has(key datastore.Key) (bool, error) {
-	if hds.options.OnBeforeHas != nil {
-		key = hds.options.OnBeforeHas(key)
+	if hds.options.BeforeHas != nil {
+		key = hds.options.BeforeHas(key)
 	}
 	exists, err := hds.ds.Has(key)
-	if hds.options.OnAfterHas != nil {
-		exists, err = hds.options.OnAfterHas(key, exists, err)
+	if hds.options.AfterHas != nil {
+		exists, err = hds.options.AfterHas(key, exists, err)
 	}
 	return exists, err
 }
@@ -74,12 +73,12 @@ func (hds *Datastore) GetSize(key datastore.Key) (int, error) {
 
 // Query searches the datastore and returns a query result, it calls OnBeforeQuery and OnAfterQuery hooks.
 func (hds *Datastore) Query(q query.Query) (query.Results, error) {
-	if hds.options.OnBeforeQuery != nil {
-		q = hds.options.OnBeforeQuery(q)
+	if hds.options.BeforeQuery != nil {
+		q = hds.options.BeforeQuery(q)
 	}
 	res, err := hds.ds.Query(q)
-	if hds.options.OnAfterQuery != nil {
-		res, err = hds.options.OnAfterQuery(q, res, err)
+	if hds.options.AfterQuery != nil {
+		res, err = hds.options.AfterQuery(q, res, err)
 	}
 	return res, err
 }

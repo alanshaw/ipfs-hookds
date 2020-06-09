@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/alanshaw/ipfs-hookds/opts"
 	"github.com/ipfs/go-datastore"
 )
 
@@ -44,7 +43,7 @@ func TestHookPut(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	hds := NewDatastore(ds, opts.OnBeforePut(onBeforePut), opts.OnAfterPut(onAfterPut))
+	hds := NewDatastore(ds, WithBeforePut(onBeforePut), WithAfterPut(onAfterPut))
 	defer hds.Close()
 
 	err := hds.Put(key, value)
@@ -88,7 +87,7 @@ func TestHookGet(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	hds := NewDatastore(ds, opts.OnBeforeGet(onBeforeGet), opts.OnAfterGet(onAfterGet))
+	hds := NewDatastore(ds, WithBeforeGet(onBeforeGet), WithAfterGet(onAfterGet))
 	defer hds.Close()
 
 	err := hds.Put(key, value)
@@ -138,7 +137,7 @@ func TestHookDelete(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	hds := NewDatastore(ds, opts.OnBeforeDelete(onBeforeDelete), opts.OnAfterDelete(onAfterDelete))
+	hds := NewDatastore(ds, WithBeforeDelete(onBeforeDelete), WithAfterDelete(onAfterDelete))
 	defer hds.Close()
 
 	err := hds.Put(key, value)
@@ -184,7 +183,7 @@ func TestHookHas(t *testing.T) {
 	}
 
 	ds := datastore.NewMapDatastore()
-	hds := NewDatastore(ds, opts.OnBeforeHas(onBeforeHas), opts.OnAfterHas(onAfterHas))
+	hds := NewDatastore(ds, WithBeforeHas(onBeforeHas), WithAfterHas(onAfterHas))
 	defer hds.Close()
 
 	err := hds.Put(key, value)
